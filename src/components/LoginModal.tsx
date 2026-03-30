@@ -3,9 +3,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GraduationCap, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { findStudent, Student } from "@/data/mockData";
 import { useToast } from "@/hooks/use-toast";
+import kuccpsLogo from "@/assets/kuccps-logo.png";
 
 interface LoginModalProps {
   open: boolean;
@@ -22,8 +23,6 @@ const LoginModal = ({ open, onLogin }: LoginModalProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    // Simulate network delay
     setTimeout(() => {
       const student = findStudent(indexNumber.trim(), kcseYear.trim(), kcpeIndex.trim());
       if (student) {
@@ -43,13 +42,17 @@ const LoginModal = ({ open, onLogin }: LoginModalProps) => {
     <Dialog open={open}>
       <DialogContent className="sm:max-w-md [&>button]:hidden" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader className="items-center gap-2">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 border-2 border-primary/20 mb-2">
-            <GraduationCap className="w-9 h-9 text-primary" />
-          </div>
-          <DialogTitle className="text-xl font-bold text-foreground text-center">
+          <img
+            src={kuccpsLogo}
+            alt="KUCCPS Logo"
+            width={90}
+            height={90}
+            className="object-contain mb-1"
+          />
+          <DialogTitle className="text-lg font-bold text-foreground text-center leading-tight">
             KUCCPS Student Portal
           </DialogTitle>
-          <p className="text-muted-foreground text-sm text-center">
+          <p className="text-muted-foreground text-xs text-center">
             Enter your credentials to check course eligibility
           </p>
         </DialogHeader>
@@ -108,6 +111,10 @@ const LoginModal = ({ open, onLogin }: LoginModalProps) => {
             <p>Index: <code className="bg-background px-1 rounded">11200301001</code> | Year: <code className="bg-background px-1 rounded">2024</code> | KCPE: <code className="bg-background px-1 rounded">30100101</code></p>
           </div>
         </form>
+
+        <p className="text-center text-[10px] text-muted-foreground mt-2">
+          © {new Date().getFullYear()} Kenya Universities and Colleges Central Placement Service. All rights reserved.
+        </p>
       </DialogContent>
     </Dialog>
   );

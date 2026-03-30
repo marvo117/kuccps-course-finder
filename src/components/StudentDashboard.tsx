@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GraduationCap, Search, LogOut, User, BookOpen, TrendingUp } from "lucide-react";
+import { GraduationCap, Search, LogOut, User, BookOpen, TrendingUp, Download, FileText } from "lucide-react";
 import KuccpsHeader from "./KuccpsHeader";
+import { generateDegreePDF, generateDiplomaPDF } from "@/lib/generatePDF";
 
 interface StudentDashboardProps {
   student: Student;
@@ -34,6 +35,9 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
   const degrees = qualifiedCourses.filter((c) => c.category === "degree");
   const diplomas = qualifiedCourses.filter((c) => c.category === "diploma");
 
+  const handleDownloadDegree = () => generateDegreePDF(student, degrees);
+  const handleDownloadDiploma = () => generateDiplomaPDF(student, diplomas);
+
   return (
     <div className="min-h-screen bg-background">
       <KuccpsHeader />
@@ -41,14 +45,14 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-8 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-primary-foreground/10 flex items-center justify-center border-2 border-primary-foreground/20">
                 <User className="w-7 h-7" />
               </div>
               <div>
                 <p className="text-primary-foreground/70 text-sm">Welcome back,</p>
-                <h2 className="text-2xl font-bold tracking-wide">{student.fullName}</h2>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-wide">{student.fullName}</h2>
                 <p className="text-primary-foreground/70 text-sm">{student.school}</p>
               </div>
             </div>
@@ -136,10 +140,24 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
         {showCourses && (
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <TrendingUp className="w-5 h-5 text-primary" />
-                Courses You Qualify For ({qualifiedCourses.length} found)
-              </CardTitle>
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <TrendingUp className="w-5 h-5 text-primary" />
+                  Courses You Qualify For ({qualifiedCourses.length} found)
+                </CardTitle>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={handleDownloadDegree}>
+                    <Download className="w-4 h-4 mr-1" />
+                    <FileText className="w-3 h-3 mr-1" />
+                    Degree PDF
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleDownloadDiploma}>
+                    <Download className="w-4 h-4 mr-1" />
+                    <FileText className="w-3 h-3 mr-1" />
+                    Diploma PDF
+                  </Button>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               {qualifiedCourses.length === 0 ? (
@@ -174,8 +192,9 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
       </div>
 
       <footer className="text-center py-6 text-muted-foreground text-xs mt-8 border-t">
-        <p>© 2024 KUCCPS — Kenya Universities and Colleges Central Placement Service</p>
-        <p className="mt-1">This is a demo portal. Data shown is for illustration purposes only.</p>
+        <p>© {new Date().getFullYear()} Kenya Universities and Colleges Central Placement Service (KUCCPS). All rights reserved.</p>
+        <p className="mt-1">P.O. Box 105166-00101, Nairobi | Tel: +254 020 5137400 / +254 713 924 444 | Email: info@kuccps.ac.ke</p>
+        <p className="mt-1">www.kuccps.net</p>
       </footer>
     </div>
   );
