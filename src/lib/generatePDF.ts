@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Student, Course } from "@/data/mockData";
 
-const KUCCPS_BLUE = [30, 80, 130];
+const KUCCPS_BLUE: [number, number, number] = [30, 80, 130];
 const HEADER_GRAY = [245, 245, 245];
 
 function addKuccpsHeader(doc: jsPDF, title: string, student: Student) {
