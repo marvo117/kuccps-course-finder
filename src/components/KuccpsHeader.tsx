@@ -1,18 +1,22 @@
-import { GraduationCap } from "lucide-react";
+import kuccpsLogo from "@/assets/kuccps-logo.png";
 
 const KuccpsHeader = () => {
   return (
-    <header className="w-full bg-primary py-3 px-4 shadow-md">
+    <header className="w-full bg-card py-2 px-4 shadow-md border-b border-border">
       <div className="max-w-5xl mx-auto flex items-center gap-3">
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-foreground/10 border-2 border-primary-foreground/30">
-          <GraduationCap className="w-7 h-7 text-primary-foreground" />
-        </div>
-        <div>
-          <h1 className="text-primary-foreground font-bold text-lg tracking-wide leading-tight">
-            KUCCPS
-          </h1>
-          <p className="text-primary-foreground/70 text-xs">
+        <img
+          src={kuccpsLogo}
+          alt="KUCCPS - Kenya Universities and Colleges Central Placement Service"
+          width={60}
+          height={60}
+          className="object-contain"
+        />
+        <div className="hidden sm:block">
+          <h1 className="text-foreground font-bold text-base tracking-wide leading-tight">
             Kenya Universities and Colleges Central Placement Service
+          </h1>
+          <p className="text-muted-foreground text-xs">
+            Student Course Eligibility Portal
           </p>
         </div>
       </div>
