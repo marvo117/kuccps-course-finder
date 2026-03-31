@@ -58,6 +58,11 @@ export default {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
+        kuccps: {
+          navy: "hsl(var(--kuccps-navy))",
+          red: "hsl(var(--kuccps-red))",
+          gold: "hsl(var(--kuccps-gold))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

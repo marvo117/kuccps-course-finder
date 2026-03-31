@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GraduationCap, Search, LogOut, User, BookOpen, TrendingUp, Download, FileText } from "lucide-react";
 import KuccpsHeader from "./KuccpsHeader";
+import CourseTable from "./CourseTable";
 import { generateDegreePDF, generateDiplomaPDF } from "@/lib/generatePDF";
 
 interface StudentDashboardProps {
@@ -44,8 +45,8 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
 
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-8 px-4">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between flex-wrap gap-4 animate-fade-in-up">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-primary-foreground/10 flex items-center justify-center border-2 border-primary-foreground/20">
                 <User className="w-7 h-7" />
@@ -56,12 +57,7 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
                 <p className="text-primary-foreground/70 text-sm">{student.school}</p>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onLogout}
-              className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 bg-transparent"
-            >
+            <Button variant="outline" size="sm" onClick={onLogout} className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 bg-transparent">
               <LogOut className="w-4 h-4 mr-1" />
               Logout
             </Button>
@@ -69,34 +65,28 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto p-4 space-y-6 mt-4">
+      <div className="max-w-6xl mx-auto p-4 space-y-6 mt-4">
         {/* Summary Cards */}
         <div className="grid grid-cols-3 gap-4">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-muted-foreground text-xs uppercase tracking-wide">Mean Grade</p>
-              <p className="text-3xl font-bold text-primary mt-1">{student.meanGrade}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-muted-foreground text-xs uppercase tracking-wide">Aggregate</p>
-              <p className="text-3xl font-bold text-primary mt-1">{student.aggregate}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-muted-foreground text-xs uppercase tracking-wide">Subjects</p>
-              <p className="text-3xl font-bold text-primary mt-1">{student.results.length}</p>
-            </CardContent>
-          </Card>
+          {[
+            { label: "Mean Grade", value: student.meanGrade },
+            { label: "Aggregate", value: student.aggregate },
+            { label: "Subjects", value: student.results.length },
+          ].map((item, i) => (
+            <Card key={item.label} className={`animate-fade-in-up animate-delay-${(i + 1) * 100}`}>
+              <CardContent className="p-4 text-center">
+                <p className="text-muted-foreground text-xs uppercase tracking-wide">{item.label}</p>
+                <p className="text-3xl font-bold text-secondary mt-1">{item.value}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* KCSE Results */}
-        <Card>
+        <Card className="animate-fade-in-up animate-delay-400">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-lg">
-              <BookOpen className="w-5 h-5 text-primary" />
+              <BookOpen className="w-5 h-5 text-secondary" />
               KCSE {student.kcseYear} Results
             </CardTitle>
           </CardHeader>
@@ -128,8 +118,8 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
 
         {/* Check Courses Button */}
         {!showCourses && (
-          <div className="flex justify-center">
-            <Button size="lg" onClick={handleCheckCourses} className="px-8 py-6 text-lg shadow-lg">
+          <div className="flex justify-center animate-fade-in-up">
+            <Button size="lg" onClick={handleCheckCourses} className="px-8 py-6 text-lg shadow-lg bg-secondary hover:bg-secondary/90 text-secondary-foreground">
               <Search className="w-5 h-5 mr-2" />
               Check Courses I Qualify For
             </Button>
@@ -138,11 +128,11 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
 
         {/* Qualified Courses */}
         {showCourses && (
-          <Card>
+          <Card className="animate-scale-fade-in">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <TrendingUp className="w-5 h-5 text-primary" />
+                  <TrendingUp className="w-5 h-5 text-secondary" />
                   Courses You Qualify For ({qualifiedCourses.length} found)
                 </CardTitle>
                 <div className="flex gap-2">
@@ -176,11 +166,9 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
                       Diplomas ({diplomas.length})
                     </TabsTrigger>
                   </TabsList>
-
                   <TabsContent value="degree">
                     <CourseTable courses={degrees} />
                   </TabsContent>
-
                   <TabsContent value="diploma">
                     <CourseTable courses={diplomas} />
                   </TabsContent>
@@ -199,38 +187,5 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
     </div>
   );
 };
-
-const CourseTable = ({ courses }: { courses: Course[] }) => (
-  <div className="overflow-x-auto">
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Code</TableHead>
-          <TableHead>Course Name</TableHead>
-          <TableHead>University / Institution</TableHead>
-          <TableHead className="text-center">Cutoff 2023</TableHead>
-          <TableHead className="text-center">Cutoff 2022</TableHead>
-          <TableHead className="text-center">Cutoff 2021</TableHead>
-          <TableHead className="text-center">Min. Grade</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {courses.map((course) => (
-          <TableRow key={course.code}>
-            <TableCell className="font-mono text-xs">{course.code}</TableCell>
-            <TableCell className="font-medium">{course.name}</TableCell>
-            <TableCell className="text-muted-foreground text-sm">{course.university}</TableCell>
-            <TableCell className="text-center font-semibold">{course.cutoff2023}</TableCell>
-            <TableCell className="text-center text-muted-foreground">{course.cutoff2022}</TableCell>
-            <TableCell className="text-center text-muted-foreground">{course.cutoff2021}</TableCell>
-            <TableCell className="text-center">
-              <Badge variant="outline">{course.minimumGrade}</Badge>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </div>
-);
 
 export default StudentDashboard;
