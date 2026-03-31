@@ -9,6 +9,7 @@ import kuccpsLogo from "@/assets/kuccps-logo.png";
 interface PaymentGateProps {
   open: boolean;
   onPaymentComplete: () => void;
+  studentName?: string;
 }
 
 const PaymentGate = ({ open, onPaymentComplete }: PaymentGateProps) => {
