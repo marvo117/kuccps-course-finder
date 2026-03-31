@@ -47,7 +47,7 @@ const LoginModal = ({ open, onLogin }: LoginModalProps) => {
             alt="KUCCPS Logo"
             width={90}
             height={90}
-            className="object-contain mb-1"
+            className="object-contain animate-scale-fade-in"
           />
           <DialogTitle className="text-lg font-bold text-foreground text-center leading-tight">
             KUCCPS Student Portal
@@ -57,45 +57,26 @@ const LoginModal = ({ open, onLogin }: LoginModalProps) => {
           </p>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-2 animate-fade-in-up">
           <div className="space-y-2">
             <Label htmlFor="indexNumber">KCSE Index Number</Label>
-            <Input
-              id="indexNumber"
-              placeholder="e.g. 11200301001"
-              value={indexNumber}
-              onChange={(e) => setIndexNumber(e.target.value)}
-              required
-            />
+            <Input id="indexNumber" placeholder="e.g. 11200301001" value={indexNumber} onChange={(e) => setIndexNumber(e.target.value)} required />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="kcseYear">KCSE Year</Label>
-            <Input
-              id="kcseYear"
-              placeholder="e.g. 2024"
-              value={kcseYear}
-              onChange={(e) => setKcseYear(e.target.value)}
-              required
-            />
+            <Input id="kcseYear" placeholder="e.g. 2024" value={kcseYear} onChange={(e) => setKcseYear(e.target.value)} required />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="kcpeIndex">KCPE Index Number (Password)</Label>
-            <Input
-              id="kcpeIndex"
-              type="password"
-              placeholder="Enter your KCPE Index Number"
-              value={kcpeIndex}
-              onChange={(e) => setKcpeIndex(e.target.value)}
-              required
-            />
+            <Input id="kcpeIndex" type="password" placeholder="Enter your KCPE Index Number" value={kcpeIndex} onChange={(e) => setKcpeIndex(e.target.value)} required />
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground" disabled={loading}>
             {loading ? (
               <span className="flex items-center gap-2">
-                <span className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                <span className="w-4 h-4 border-2 border-secondary-foreground/30 border-t-secondary-foreground rounded-full animate-spin" />
                 Verifying...
               </span>
             ) : (
@@ -108,7 +89,7 @@ const LoginModal = ({ open, onLogin }: LoginModalProps) => {
 
           <div className="bg-muted rounded-lg p-3 text-xs text-muted-foreground space-y-1">
             <p className="font-semibold">Demo Credentials:</p>
-            <p>Index: <code className="bg-background px-1 rounded">11200301001</code> | Year: <code className="bg-background px-1 rounded">2024</code> | KCPE: <code className="bg-background px-1 rounded">30100101</code></p>
+            <p>Index: <code className="bg-card px-1 rounded">11200301001</code> | Year: <code className="bg-card px-1 rounded">2024</code> | KCPE: <code className="bg-card px-1 rounded">30100101</code></p>
           </div>
         </form>
 
