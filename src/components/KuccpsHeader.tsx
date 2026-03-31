@@ -1,12 +1,22 @@
+import { Link, useLocation } from "react-router-dom";
 import { Phone, Mail } from "lucide-react";
 import kuccpsLogo from "@/assets/kuccps-logo.png";
 
-const navItems = ["Home", "About Us", "Portals", "Downloads", "Opportunities", "FAQs", "Contact Us", "Student's Portal"];
+const navItems = [
+  { label: "Home", path: "/" },
+  { label: "About Us", path: "/about" },
+  { label: "How It Works", path: "/how-it-works" },
+  { label: "FAQs", path: "/faqs" },
+  { label: "Contact Us", path: "/contact" },
+  { label: "Student's Portal", path: "/" },
+];
 
 const KuccpsHeader = () => {
+  const location = useLocation();
+
   return (
     <header className="w-full">
-      {/* Top contact bar - dark navy */}
+      {/* Top contact bar */}
       <div className="bg-primary text-primary-foreground text-xs py-1.5 px-4">
         <div className="max-w-6xl mx-auto flex items-center gap-4 flex-wrap">
           <span className="flex items-center gap-1">
@@ -23,13 +33,7 @@ const KuccpsHeader = () => {
       {/* Logo + Title */}
       <div className="bg-card py-3 px-4 border-b border-border">
         <div className="max-w-6xl mx-auto flex items-center gap-4">
-          <img
-            src={kuccpsLogo}
-            alt="KUCCPS Logo"
-            width={70}
-            height={70}
-            className="object-contain"
-          />
+          <img src={kuccpsLogo} alt="KUCCPS Logo" width={70} height={70} className="object-contain" />
           <h1 className="text-secondary font-bold text-lg sm:text-xl tracking-wide leading-tight">
             Kenya Universities and Colleges Central Placement Service
           </h1>
@@ -40,14 +44,19 @@ const KuccpsHeader = () => {
       <nav className="bg-primary text-primary-foreground">
         <div className="max-w-6xl mx-auto flex items-center gap-0 overflow-x-auto">
           {navItems.map((item) => (
-            <span
-              key={item}
-              className={`px-3 py-2.5 text-xs font-medium whitespace-nowrap cursor-pointer transition-colors hover:bg-secondary ${
-                item === "Student's Portal" ? "bg-secondary" : ""
+            <Link
+              key={item.label}
+              to={item.path}
+              className={`px-3 py-2.5 text-xs font-medium whitespace-nowrap transition-colors hover:bg-secondary ${
+                location.pathname === item.path && item.label !== "Student's Portal"
+                  ? "bg-secondary"
+                  : item.label === "Student's Portal"
+                  ? "bg-secondary"
+                  : ""
               }`}
             >
-              {item}
-            </span>
+              {item.label}
+            </Link>
           ))}
         </div>
       </nav>
