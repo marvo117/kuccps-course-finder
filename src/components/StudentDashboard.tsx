@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GraduationCap, Search, LogOut, User, BookOpen, TrendingUp, Download, FileText } from "lucide-react";
+import { GraduationCap, Search, LogOut, User, BookOpen, TrendingUp, Download, FileText, Lock } from "lucide-react";
 import KuccpsHeader from "./KuccpsHeader";
 import CourseTable from "./CourseTable";
+import PaymentGate from "./PaymentGate";
 import { generateDegreePDF, generateDiplomaPDF } from "@/lib/generatePDF";
 
 interface StudentDashboardProps {
@@ -23,11 +24,27 @@ const gradeColor = (grade: string) => {
 };
 
 const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
+  const [paid, setPaid] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [showCourses, setShowCourses] = useState(false);
   const [qualifiedCourses, setQualifiedCourses] = useState<Course[]>([]);
   const [courseTab, setCourseTab] = useState("degree");
 
   const handleCheckCourses = () => {
+    if (!paid) {
+      setShowPayment(true);
+      return;
+    }
+    revealCourses();
+  };
+
+  const handlePaymentComplete = () => {
+    setPaid(true);
+    setShowPayment(false);
+    revealCourses();
+  };
+
+  const revealCourses = () => {
     const courses = getQualifiedCourses(student);
     setQualifiedCourses(courses);
     setShowCourses(true);
@@ -36,12 +53,12 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
   const degrees = qualifiedCourses.filter((c) => c.category === "degree");
   const diplomas = qualifiedCourses.filter((c) => c.category === "diploma");
 
-  const handleDownloadDegree = () => generateDegreePDF(student, degrees);
-  const handleDownloadDiploma = () => generateDiplomaPDF(student, diplomas);
-
   return (
     <div className="min-h-screen bg-background">
       <KuccpsHeader />
+
+      {/* Payment Modal */}
+      <PaymentGate open={showPayment} onPaymentComplete={handlePaymentComplete} studentName={student.fullName} />
 
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-8 px-4">
@@ -120,6 +137,7 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
         {!showCourses && (
           <div className="flex justify-center animate-fade-in-up">
             <Button size="lg" onClick={handleCheckCourses} className="px-8 py-6 text-lg shadow-lg bg-secondary hover:bg-secondary/90 text-secondary-foreground">
+              {!paid && <Lock className="w-5 h-5 mr-2" />}
               <Search className="w-5 h-5 mr-2" />
               Check Courses I Qualify For
             </Button>
@@ -136,12 +154,12 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
                   Courses You Qualify For ({qualifiedCourses.length} found)
                 </CardTitle>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={handleDownloadDegree}>
+                  <Button variant="outline" size="sm" onClick={() => generateDegreePDF(student, degrees)}>
                     <Download className="w-4 h-4 mr-1" />
                     <FileText className="w-3 h-3 mr-1" />
                     Degree PDF
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleDownloadDiploma}>
+                  <Button variant="outline" size="sm" onClick={() => generateDiplomaPDF(student, diplomas)}>
                     <Download className="w-4 h-4 mr-1" />
                     <FileText className="w-3 h-3 mr-1" />
                     Diploma PDF
@@ -166,12 +184,8 @@ const StudentDashboard = ({ student, onLogout }: StudentDashboardProps) => {
                       Diplomas ({diplomas.length})
                     </TabsTrigger>
                   </TabsList>
-                  <TabsContent value="degree">
-                    <CourseTable courses={degrees} />
-                  </TabsContent>
-                  <TabsContent value="diploma">
-                    <CourseTable courses={diplomas} />
-                  </TabsContent>
+                  <TabsContent value="degree"><CourseTable courses={degrees} /></TabsContent>
+                  <TabsContent value="diploma"><CourseTable courses={diplomas} /></TabsContent>
                 </Tabs>
               )}
             </CardContent>
