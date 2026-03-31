@@ -12,7 +12,7 @@ interface PaymentGateProps {
   studentName?: string;
 }
 
-const PaymentGate = ({ open, onPaymentComplete }: PaymentGateProps) => {
+const PaymentGate = ({ open, onPaymentComplete, studentName }: PaymentGateProps) => {
   const [phone, setPhone] = useState("");
   const [step, setStep] = useState<"info" | "processing" | "confirm">("info");
   const [mpesaCode, setMpesaCode] = useState("");
