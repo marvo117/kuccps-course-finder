@@ -17,7 +17,7 @@ const ContactUs = () => {
 
         <div className="grid sm:grid-cols-2 gap-4">
           {[
-            { icon: Phone, title: "Phone", lines: ["+254 020 5137400", "+254 713 924 444"] },
+            { icon: Phone, title: "Phone", lines: ["+254 020 5137400", "+254 713 924 444", "0780911606", "0717375747"] },
             { icon: Mail, title: "Email", lines: ["info@kuccps.ac.ke"] },
             { icon: MapPin, title: "Address", lines: ["P.O. Box 105166-00101", "Nairobi, Kenya", "ACK Garden Annex, 1st Ngong Avenue"] },
             { icon: Globe, title: "Website", lines: ["www.kuccps.net"] },
